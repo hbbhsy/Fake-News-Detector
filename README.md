@@ -1,4 +1,4 @@
 # Fake-News-Detector
 
-### Data Sourse
+### Data Source
 https://github.com/several27/FakeNewsCorpus
