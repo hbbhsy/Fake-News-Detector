@@ -23,6 +23,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -38,9 +39,14 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="245" y="-728" key="com.intellij.ide.util.TipDialog" timestamp="1580691882089">
-      <screen x="-242" y="-1057" width="1920" height="1057" />
+    <state x="227" y="-901" key="SettingsEditor" timestamp="1580852286185">
+      <screen x="-242" y="-1080" width="1920" height="1080" />
     </state>
+    <state x="227" y="-901" key="SettingsEditor/-242.-1080.1920.1080/0.0.1440.900@-242.-1080.1920.1080" timestamp="1580852286185" />
+    <state x="365" y="280" key="com.intellij.ide.util.TipDialog" timestamp="1580839474494">
+      <screen x="44" y="23" width="1396" height="877" />
+    </state>
+    <state x="365" y="280" key="com.intellij.ide.util.TipDialog/-242.-1057.1920.1057/44.23.1396.877@-242.-1057.1920.1057" timestamp="1580839474494" />
     <state x="245" y="-728" key="com.intellij.ide.util.TipDialog/44.23.1396.877/-242.-1057.1920.1057@-242.-1057.1920.1057" timestamp="1580691882089" />
     <state x="398" y="296" key="com.intellij.ide.util.TipDialog/44.23.1396.877/-242.-1057.1920.1057@44.23.1396.877" timestamp="1580690642778" />
     <state x="-142" y="-980" width="1720" height="880" key="dock-window-1" timestamp="1580768098433">
@@ -51,6 +57,10 @@
       <screen x="-242" y="-1080" width="1920" height="1080" />
     </state>
     <state x="-142" y="-980" width="1720" height="880" key="dock-window-2/-242.-1080.1920.1080/0.0.1440.900@-242.-1080.1920.1080" timestamp="1580768098433" />
+    <state x="381" y="-894" width="673" height="708" key="find.popup" timestamp="1580851734940">
+      <screen x="-242" y="-1080" width="1920" height="1080" />
+    </state>
+    <state x="381" y="-894" width="673" height="708" key="find.popup/-242.-1080.1920.1080/0.0.1440.900@-242.-1080.1920.1080" timestamp="1580851734940" />
     <state x="457" y="-823" key="search.everywhere.popup" timestamp="1580755054487">
       <screen x="-242" y="-1057" width="1920" height="1057" />
     </state>

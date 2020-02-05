@@ -1,70 +1,101 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-from wordcloud import WordCloud
-from PIL import Image
 import operator
-import string
-import sys
-import unicodedata
+from src.pipeline import tokenize
+from src.pipeline import clean
+from src.pipeline import vectorize
+from collections import defaultdict
+from sklearn.decomposition import NMF
 
-def getWordForTypes(df):
 
-    def createDict(token):
+class EDA(object):
+    """
+    A EDA Class
+    """
+
+    def __init__(self, df):
+        self.df = df
+        self.types = None
+        self.bow = None
+        self.tf = None
+        self.tfidf = None
+        self.type_word_lst = {}
+        self.W = None
+        self.H = None
+        self.H_df = None
+
+    def process(self, sw):
+        """
+        take a list of stopwords
+        remove extra columns of self.df, tokenized self.df
+        """
+        self.df = clean(self.df)
+        documents = tokenize(self.df['content'], sw)
+        self.df['tokens'] = documents
+        self.types = self.df['type'].unique()
+        return self
+
+    def wordCounter(self, tokens):
+        """T
+        ake array of tokenized documents
+        Get sorted word counts dict
+        """
         words = {}
-        for row in token:
+        for row in tokens:
             for word in row:
                 if word in words:
                     words[word] += 1
                 else:
                     words[word] = 1
-        sorted_d = dict(sorted(words.items(), key=operator.itemgetter(1), reverse=True))
+
+        sorted_d = dict(sorted(words.items(),
+                               key=operator.itemgetter(1),
+                               reverse=True))
         return sorted_d
 
-    types = df['type'].unique()
-    type_df=[]
-    for i in types:
-        type_df.append(df[df['type']==i])
-    # fake = df[df['type'] == 'fake']
-    # hate = df[df['type'] == 'hate']
-    # rumor = df[df['type'] == 'rumor']
-    # satire = df[df['type'] == 'satire']
-    # political = df[df['type'] == 'political']
-    # clickbait = df[df['type'] == 'clickbait']
-    # conspiracy = df[df['type'] == 'conspiracy']
-    # unreliable = df[df['type'] == 'unreliable']
-    # junksci = df[df['type'] == 'junksci']
-    # bias = df[df['type'] == 'bias']
+    def getWordsForTypes(self):
+        """
+        get words for each type
+        """
+        type_df = []
+        for i in self.types:
+            type_df.append(self.df[self.df['type'] == i])
 
-    type_word_lst={}
-    for i,t in enumerate(types):
-        type_word_lst[t]=createDict(type_df[i]['tokens'])
-    return type_word_lst
+        for i, t in enumerate(self.types):
+            self.type_word_lst[t] = self.wordCounter(type_df[i]['tokens'])
+        return self.type_word_lst
 
-# def topNWords(dict_of_words, N):
-#     top_n=max(dict_of_words,key=dict_of_words.get)[:N]
-#     return top_n
+    def top_words(self, n):
+        """
+        return top n words for a dict representing  news type
+        """
+        def top_n(d, n):
+            """
+            helper function to return top n keys by values in given dict
+            """
+            dct = defaultdict(list)
+            for k, v in self.type_word_lst[t].items():
+                dct[v].append(k)
+            return sorted(dct.items())[-n:][::-1]
 
+        for t in self.types:
+            t_n = []
+            for i in top_n(self.type_word_lst[t], n):
+                t_n.append(i[1][0])
+            print('{}: {}\n'.format(t, t_n))
 
-from collections import defaultdict
-# dct = defaultdict(list)
+    def doNMF(self, n):
+        """
+        Call sklearn NMF to perform basic NMF,
+        return W, H for self.df
+        """
+        self.bow, self.tf, self.tfidf = vectorize(self.df['tokens'])
+        nmf = NMF(n_components=n)
+        nmf.fit(self.tf)
+        self.W = nmf.transform(self.tf)
+        self.H = nmf.components_
+        self.H_df = pd.DataFrame(self.H, columns=self.bow.keys())
+        return self
 
-def top_n(d, n):
-    dct = defaultdict(list)
-    for k, v in d.items():
-        dct[v].append(k)
-    return sorted(dct.items())[-n:][::-1]
-
-def plotWordCould(ax,bow)：
-    ax.figure(figsize = (20,10))
-    wc = WordCloud(background_color="white",width=1000,height=1000, max_words=100,
-               relative_scaling=0.5,normalize_plurals=False).generate_from_frequencies(bow)
-plt.grid(False)
-plt.title("Fake News Words",size=36)
-plt.axis('off')
-plt.imshow(wc)
-plt.savefig('EDA/fake_words.png')
-plt.show()
 
 
 

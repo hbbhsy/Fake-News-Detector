@@ -9,33 +9,43 @@ import string
 import sys
 import unicodedata
 
+
 def clean(df):
-    '''Input: df: pandas DataFrame
+    """
+    Input: df: pandas DataFrame
 
    Remove unused features, relabeling
 
    Return: df: pandas DataFrame
-   '''
+   """
     df = df.drop(
         ['id', 'Unnamed: 0', 'domain', 'url', 'scraped_at', 'inserted_at', 'updated_at', 'keywords', 'meta_description',
          'meta_keywords', 'tags', 'summary', 'source'], axis=1)
-    df['label']= df['type'].replace({'rumor': 1, 'hate': 0, 'unreliable': 1, 'conspiracy': 0, 'clickbait': 1, 'satire': 0,
+    df=df[df['type']!='unknown']
+    df = df.dropna()
+    df['label'] = df['type'].replace({'rumor': 1, 'hate': 0, 'unreliable': 1, 'conspiracy': 0, 'clickbait': 1, 'satire': 0,
                                 'fake': 1, 'reliable': 0, 'bias': 0, 'political': 0, 'junksci': 0})
     return df
 
 def remove_accents(input_str):
+    """
+    remove accents for an input_str
+    return str
+    """
     nfkd_form = unicodedata.normalize('NFKD', input_str)
     only_ascii = nfkd_form.encode('ASCII', 'ignore')
     return only_ascii.decode()
 
 def tokenize(documents,stopwords):
-    '''Input: Array of documents
+    """
+    Input: Array of documents
 
     Remove stopwords, html, punctuation, digits
     Tokenize each document
     Lemmatize tokens for each document
 
-    Return: Array of tokenized documents'''
+    Return: Array of tokenized documents
+    """
 
     def cleanText(wordSeries):
         tbl = dict.fromkeys(i for i in range(sys.maxunicode)
@@ -75,20 +85,22 @@ def tokenize(documents,stopwords):
     docs_lemma = [[lemmatizer.lemmatize(word) for word in words] for words in docs]
     return docs_lemma
 
-def vectorize(documents):
-    '''Input: tokenized documents
+def vectorize(documents, ngram=1):
+    """
+    Input: tokenized documents
 
     Compute Bag-of-Word, TF, TFIDF using sklearn
 
-    Return: bow,tf,tfidf'''
+    Return: bow,tf,tfidf
+    """
     corpus = [' '.join(row) for row in documents]
     # stopwords = pd.read_csv('../data/sw1k.csv')['term'].to_numpy()
-    cv = CountVectorizer(ngram_range=(1,1))
+    cv = CountVectorizer(ngram_range=(1, ngram))
     tf = cv.fit_transform(corpus).todense()
     bow = cv.vocabulary_
     tv = TfidfVectorizer()
     tfidf = tv.fit_transform(corpus).todense()
 
-    return bow,tf,tfidf
+    return bow, tf, tfidf
 
 
