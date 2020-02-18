@@ -10,7 +10,7 @@ import sys
 import unicodedata
 
 
-def clean(df):
+def clean(df, labeling=True):
     """
     Input: df: pandas DataFrame
 
@@ -21,11 +21,14 @@ def clean(df):
     df = df.drop(
         ['id', 'Unnamed: 0', 'domain', 'url', 'scraped_at', 'inserted_at', 'updated_at', 'keywords', 'meta_description',
          'meta_keywords', 'tags', 'summary', 'source'], axis=1)
-    df=df[df['type']!='unknown']
+    df = df[df['type'] != 'unknown']
     df = df.dropna()
-    df['label'] = df['type'].replace({'rumor': 1, 'hate': 0, 'unreliable': 1, 'conspiracy': 0, 'clickbait': 1, 'satire': 0,
-                                'fake': 1, 'reliable': 0, 'bias': 0, 'political': 0, 'junksci': 0})
+    if labeling:
+        df['label'] = df['type'].replace({'rumor': 1, 'hate': 0, 'unreliable': 1, 'conspiracy': 0, 'clickbait': 1, 'satire': 0,
+                                        'fake': 1, 'reliable': 0, 'bias': 0, 'political': 0, 'junksci': 0})
+    df = df.reset_index()
     return df
+
 
 def remove_accents(input_str):
     """
@@ -36,7 +39,8 @@ def remove_accents(input_str):
     only_ascii = nfkd_form.encode('ASCII', 'ignore')
     return only_ascii.decode()
 
-def tokenize(documents,stopwords):
+
+def tokenize(documents, stopwords):
     """
     Input: Array of documents
 
@@ -59,8 +63,9 @@ def tokenize(documents,stopwords):
         def remove_punctuation(text):
             return text.translate(tbl)
 
-        wordSeries = wordSeries.apply(lambda x: remove_punctuation(x))#remove punctuation
-        wordSeries = wordSeries.apply(lambda x: ''.join([i for i in x if not i.isdigit()]))#remove digits
+        # remove punctuation
+        wordSeries = wordSeries.apply(lambda x: remove_punctuation(x))
+        wordSeries = wordSeries.apply(lambda x: ''.join([i for i in x if not i.isdigit()]))  #remove digits
         wordSeries = wordSeries.apply(lambda x: x.lower())#lower cases
         wordSeries = wordSeries.apply(lambda x: x.replace('<br >', ' '))#remove html
         wordSeries = wordSeries.apply(lambda x: x.replace('<br>', ' '))#remove html
@@ -80,12 +85,13 @@ def tokenize(documents,stopwords):
     punctuation_ = set(string.punctuation)
     def filter_tokens(sent):
         return([w for w in sent if not w in stopwords and not w in punctuation_]) #remove stopword
-    docs=list(map(filter_tokens,docs))
+    docs = list(map(filter_tokens,docs))
     lemmatizer = WordNetLemmatizer()
     docs_lemma = [[lemmatizer.lemmatize(word) for word in words] for words in docs]
     return docs_lemma
 
-def vectorize(documents, ngram=1):
+
+def vectorize(documents, ngram=2):
     """
     Input: tokenized documents
 
@@ -97,10 +103,10 @@ def vectorize(documents, ngram=1):
     # stopwords = pd.read_csv('../data/sw1k.csv')['term'].to_numpy()
     cv = CountVectorizer(ngram_range=(1, ngram))
     tf = cv.fit_transform(corpus).todense()
-    bow = cv.vocabulary_
     tv = TfidfVectorizer()
     tfidf = tv.fit_transform(corpus).todense()
+    bow = tv.get_feature_names()
 
-    return bow, tf, tfidf
+    return bow, tf, tfidf, cv, tv
 
 

@@ -12,8 +12,8 @@ class EDA(object):
     A EDA Class
     """
 
-    def __init__(self, df):
-        self.df = df
+    def __init__(self):
+        self.df = None
         self.types = None
         self.bow = None
         self.tf = None
@@ -22,14 +22,18 @@ class EDA(object):
         self.W = None
         self.H = None
         self.H_df = None
+        self.cv = None
+        self.tv = None
+        self.sw = None
 
-    def process(self, sw):
+    def process(self, df, sw):
         """
         take a list of stopwords
         remove extra columns of self.df, tokenized self.df
         """
-        self.df = clean(self.df)
-        documents = tokenize(self.df['content'], sw)
+        self.df = clean(df)
+        self.sw = sw
+        documents = tokenize(self.df['content'], self.sw)
         self.df['tokens'] = documents
         self.types = self.df['type'].unique()
         return self
@@ -83,17 +87,20 @@ class EDA(object):
                 t_n.append(i[1][0])
             print('{}: {}\n'.format(t, t_n))
 
+    def get_vector(self):
+        self.bow, self.tf, self.tfidf, self.cv, self.tv = vectorize(self.df['tokens'])
+        return self.bow, self.tf, self.tfidf
+
     def doNMF(self, n):
         """
         Call sklearn NMF to perform basic NMF,
         return W, H for self.df
         """
-        self.bow, self.tf, self.tfidf = vectorize(self.df['tokens'])
         nmf = NMF(n_components=n)
         nmf.fit(self.tf)
         self.W = nmf.transform(self.tf)
         self.H = nmf.components_
-        self.H_df = pd.DataFrame(self.H, columns=self.bow.keys())
+        self.H_df = pd.DataFrame(self.H, columns=self.bow)
         return self
 
 
