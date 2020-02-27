@@ -25,8 +25,8 @@ def clean(df, labeling=True):
     df = df.dropna()
     if labeling:
         df['label'] = df['type'].replace({'rumor': 1, 'hate': 0, 'unreliable': 1, 'conspiracy': 0, 'clickbait': 1, 'satire': 0,
-                                        'fake': 1, 'reliable': 0, 'bias': 0, 'political': 0, 'junksci': 0})
-    df = df.reset_index()
+                                          'fake': 1, 'reliable': 0, 'bias': 0, 'political': 0, 'junksci': 0})
+    # df = df.reset_index()
     return df
 
 
@@ -91,7 +91,7 @@ def tokenize(documents, stopwords):
     return docs_lemma
 
 
-def vectorize(documents, ngram=2):
+def vectorize(documents, max_features=50000, ngram=2):
     """
     Input: tokenized documents
 
@@ -103,7 +103,7 @@ def vectorize(documents, ngram=2):
     # stopwords = pd.read_csv('../data/sw1k.csv')['term'].to_numpy()
     cv = CountVectorizer(ngram_range=(1, ngram))
     tf = cv.fit_transform(corpus).todense()
-    tv = TfidfVectorizer()
+    tv = TfidfVectorizer(max_features=max_features)
     tfidf = tv.fit_transform(corpus).todense()
     bow = tv.get_feature_names()
 

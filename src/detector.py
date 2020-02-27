@@ -36,6 +36,7 @@ from EDA import EDA
 import pandas as pd
 import numpy as np
 import pickle
+import boto3
 import datetime as dt
 import glob
 import sys
@@ -44,57 +45,47 @@ import os.path
 
 class Detector(object):
     """
-    A class to predict whether a news article is fake.
+    Detector - Fake News Detect
+    A class to create predictions on the reliability of news articles.
     """
-    def __init__(self, model_obj, eda_obj):
-        # self.model = None
+    def __init__(self):
         self.article = None
         self.corpus = []
-        self.output = ''
-        self.sw = eda_obj.sw
-        self.tv = eda_obj.tv
+        self.sw = None
+        self.model = None
+
+    def get_model(self):
+        """Load trained model from pickle, stored on AWS S3"""
+        # loading pickled model from AWS S3
+        print('Loading the detector...')
+        s3 = boto3.resource('s3')
+        bucket = 'fakenewscorpus'
+        data_key = ''
+        data_location = 's3://{}/{}'.format(bucket, data_key)
+        my_pickle = pickle.loads(s3.Bucket(bucket).Object(data_key).get()['Body'].read())
+        with open('my_pickle','rb') as f:
+            self.model = pickle.load(my_pickle)
+        # loading tfidf csv file from AWS S3
 
 
-        # self.df = None
-        # self.types = None
-        # self.bow = None
-        # self.tf = None
-        # self.tfidf = None
-        # self.type_word_lst = {}
-        # self.W = None
-        # self.H = None
-        # self.H_df = None
-        # self.cv = None
-        # self.tv = None
-        # self.sw = None
+        # loading stopwords
+
+        print('Loading complete')
+        return self.model, self.sw, self.tfidf
 
 
-    def inp(self):
-        """
-        take input
-        """
-        self.article = input("Enter your news article: ")
-
-        return self
-
-    def get_eda_atr(self):
-        """get attributes from eda objects"""
-        self.sw = eda_object.sw
-        self.tv = eda_object.tv
-        self.bow = eda_object
-
-    def run(self, trained_model, stopwords):
+    def run(self):
         """
         run the detector, output the prediction
         """
-        self.inp()
-        self.corpus = self.get_corpus(self.article, stopwords)
-        vector = trained_model.tv.transform(self.corpus)
-        pred = trained_model.predict(vector)
+        self.article = input("Enter your news article: ")
+        self.corpus = self.get_corpus(self.article, self.sw)
+        vector = self.model.transform(self.corpus)
+        pred = self.model.predict(vector)
         if pred == 1:
-            self.output = 'fake'
+            output = 'fake'
         else:
-            self.output = 'not fake'
+            output = 'not fake'
 
         print('This news is {}.'.format(output))
 
@@ -109,3 +100,9 @@ class Detector(object):
         corpus = [' '.join(token for token in tokens)]
 
         return corpus
+
+if __name__ == '__main__':
+
+    detector = Detector()
+    detector.run()
+

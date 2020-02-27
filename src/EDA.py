@@ -39,8 +39,7 @@ class EDA(object):
         return self
 
     def wordCounter(self, tokens):
-        """T
-        ake array of tokenized documents
+        """Take array of tokenized documents
         Get sorted word counts dict
         """
         words = {}

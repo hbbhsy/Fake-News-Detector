@@ -6,10 +6,13 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.svm import SVC
 
+# Neural Networks
+import tensorflow as tf
+from tensorflow.keras import
+
 # Testing and optimization
 from sklearn.model_selection import train_test_split
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import KFold
+from sklearn.model_selection import GridSearchCV, KFold
 from sklearn.metrics import f1_score, accuracy_score, precision_score, recall_score, roc_auc_score
 from sklearn.metrics.regression import mean_absolute_error, mean_squared_error, r2_score
 
@@ -50,6 +53,9 @@ class Model(object):
 
         return score, f1, precision, recall, roc_auc
 
+    def baseline_model(self):
+
+
     def compare_models(self, models):
         """
         comparing models based on cross-validation , f1 score
@@ -66,6 +72,12 @@ class Model(object):
                 m_score = (self.model_metrics(m, X_test, y_test))
 
                 # print ('{} metrics: {}'.format(model, m_scores))
+
+
+if __name__ == '__main__':
+    with open('model.pkl', 'wb') as f:
+        # Write the model to a file.
+        pickle.dump(model, f)
 
 
 
