@@ -109,4 +109,8 @@ def vectorize(documents, max_features=50000, ngram=2):
 
     return bow, tf, tfidf, cv, tv
 
+def balance(df):
+    n_pos = len(df[df['label']==1])
+    n_neg = len(df[df['label']==0])
+    return n_pos, n_neg
 
