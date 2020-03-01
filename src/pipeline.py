@@ -101,7 +101,7 @@ def vectorize(documents, max_features=50000, ngram=2):
     """
     corpus = [' '.join(row) for row in documents]
     # stopwords = pd.read_csv('../data/sw1k.csv')['term'].to_numpy()
-    cv = CountVectorizer(ngram_range=(1, ngram))
+    cv = CountVectorizer(max_features=max_features, ngram_range=(1, ngram))
     tf = cv.fit_transform(corpus).todense()
     tv = TfidfVectorizer(max_features=max_features)
     tfidf = tv.fit_transform(corpus).todense()
