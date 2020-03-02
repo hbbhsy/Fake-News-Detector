@@ -4,10 +4,14 @@ Today we are living in the Era of information explosion. Along with the developm
 
 News has become faster, less costly and easily accessible with social media. This change has come along with some disadvantages as well. In particular, beguiling content, such as fake news made by social media users, is becoming increasingly dangerous. The fake news problem, despite being introduced for the first time very recently, has become an important research topic due to the high content of social media. Writing fake comments and news on social media is easy for users. The main challenge is to determine the difference between real and fake news. 
 
+### Scope
+The focus of this work is to apple novel deep learning approaches to 
 
 ### Data
 
-The dataset used for this project is from Fake News Corpus
+The [Fake News Corpus](https://github.com/several27/FakeNewsCorpus) is an open source dataset composed of millions of news articles mostly scraped from a curated list of 1001 domains from http://www.opensources.co/. 
+
+The corpus was created by scraping (using scrapy) all the domains as provided by http://www.opensources.co/. Then all the pure HTML content was processed to extract the article text with some additional fields (listed below) using the newspaper library. Each article has been attributed the same label as the label associated with its domain.
 
 ### EDA
 The news are labeled into 8 types. For each type, the 10 most frequent words are:
@@ -19,7 +23,7 @@ hate|muslim, islam, palestinian, refugee, migrant, islamic, hate, christian, see
 unreliable|african, haitian, college, africa, dr, hill, un, dog, church, congolese
 conspiracy|clinton, iran, fluoride, spring, religious, pp, natural, planned, mineral, parenthood
 clickbait|trump, democrat, republican, fbi, featured, california, senate, crime, clinton, attorney
-satire|christian, contact, im, grey, don't, jake, movie, thats, barista, he
+satire|christian, contact, im, grey, dont, jake, movie, thats, barista, he
 fake|nuclear, blockchain, planet, experimentation, earth, headline, federation, stock, search, bitcoin
 reliable|christian, church, religious, god, abortion, speech, faith, page, weapon, faction
 bias|rose, abortion, planned, museum, prolife, democrat, protection, infanticide, voting, promising
@@ -28,6 +32,7 @@ junksci|lazar, shapr, networking, ufo, base, individual, topic, facility, cleara
 
 
 
-### Data Source
+### The Detector
+The Fake News Detector is a deep learning model trained using the [Fake News Corpus](https://github.com/several27/FakeNewsCorpus) dataset. At this stage, the detector is able to perform fake and non-fake news detection. 
 
 
