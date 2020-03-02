@@ -6,13 +6,11 @@ Today we are living in the Era of information explosion. Along with the developm
 
 News has become faster, less costly and easily accessible with social media. This change has come along with some disadvantages as well. In particular, beguiling content, such as fake news made by social media users, is becoming increasingly dangerous. The fake news problem, despite being introduced for the first time very recently, has become an important research topic due to the high content of social media. Writing fake comments and news on social media is easy for users. The main challenge is to determine the difference between real and fake news. 
 
-
-***
 ## Scope
 The focus of this work is to apple novel deep learning approaches to 
 
 ![info-explosion](img/Information-Explosion.jpg)
-***
+
 ## Data
 
 The [Fake News Corpus](https://github.com/several27/FakeNewsCorpus) is an open source dataset composed of millions of news articles mostly scraped from a curated list of 1001 domains from http://www.opensources.co/. 
@@ -49,7 +47,7 @@ Word cloud for news labeled as 'Hate':
 A tendency of mentioning 'wave', 'theory' are appeared in 'fake' news. 
 Word cloud for news labeled as 'Rumor':
 ![rumor_words](EDA/rumor_words.png)
-***
+
 ## The Detector
 The Fake News Detector is a deep learning model trained using the [Fake News Corpus](https://github.com/several27/FakeNewsCorpus) dataset. At this stage, the detector is able to perform fake and non-fake news detection. 
 
