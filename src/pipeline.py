@@ -40,6 +40,34 @@ def remove_accents(input_str):
     return only_ascii.decode()
 
 
+def cleanText(wordSeries):
+    tbl = dict.fromkeys(i for i in range(sys.maxunicode)
+                        if unicodedata.category(chr(i)).startswith('P'))
+
+    def remove_accents(input_str):
+        nfkd_form = unicodedata.normalize('NFKD', input_str)
+        only_ascii = nfkd_form.encode('ASCII', 'ignore')
+        return only_ascii.decode()
+
+    def remove_punctuation(text):
+        return text.translate(tbl)
+
+    # remove punctuation
+    wordSeries = wordSeries.apply(lambda x: remove_punctuation(x))
+    wordSeries = wordSeries.apply(lambda x: ''.join([i for i in x if not i.isdigit()]))  #remove digits
+    wordSeries = wordSeries.apply(lambda x: x.lower())#lower cases
+    wordSeries = wordSeries.apply(lambda x: x.replace('<br >', ' '))#remove html
+    wordSeries = wordSeries.apply(lambda x: x.replace('<br>', ' '))#remove html
+    wordSeries = wordSeries.apply(lambda x: x.replace('\n', ' '))#remove html
+    wordSeries = wordSeries.apply(lambda x: x.replace('\n\n', ' '))
+    wordSeries = wordSeries.apply(lambda x: x.replace('$', ' '))
+    wordSeries = wordSeries.apply(lambda x: x.replace('>', ' '))
+    wordSeries = wordSeries.apply(lambda x: remove_accents(x))
+    wordSeries = wordSeries.apply(lambda x: x.replace('`', ''))#remove extra punctuation
+    # wordSeries = wordSeries.apply(lambda x: x.replace(' id ', ' '))
+    return wordSeries
+
+
 def tokenize(documents, stopwords):
     """
     Input: Array of documents
@@ -50,34 +78,6 @@ def tokenize(documents, stopwords):
 
     Return: Array of tokenized documents
     """
-
-    def cleanText(wordSeries):
-        tbl = dict.fromkeys(i for i in range(sys.maxunicode)
-                            if unicodedata.category(chr(i)).startswith('P'))
-
-        def remove_accents(input_str):
-            nfkd_form = unicodedata.normalize('NFKD', input_str)
-            only_ascii = nfkd_form.encode('ASCII', 'ignore')
-            return only_ascii.decode()
-
-        def remove_punctuation(text):
-            return text.translate(tbl)
-
-        # remove punctuation
-        wordSeries = wordSeries.apply(lambda x: remove_punctuation(x))
-        wordSeries = wordSeries.apply(lambda x: ''.join([i for i in x if not i.isdigit()]))  #remove digits
-        wordSeries = wordSeries.apply(lambda x: x.lower())#lower cases
-        wordSeries = wordSeries.apply(lambda x: x.replace('<br >', ' '))#remove html
-        wordSeries = wordSeries.apply(lambda x: x.replace('<br>', ' '))#remove html
-        wordSeries = wordSeries.apply(lambda x: x.replace('\n', ' '))#remove html
-        wordSeries = wordSeries.apply(lambda x: x.replace('\n\n', ' '))
-        wordSeries = wordSeries.apply(lambda x: x.replace('$', ' '))
-        wordSeries = wordSeries.apply(lambda x: x.replace('>', ' '))
-        wordSeries = wordSeries.apply(lambda x: remove_accents(x))
-        wordSeries = wordSeries.apply(lambda x: x.replace('`', ''))#remove extra punctuation
-        # wordSeries = wordSeries.apply(lambda x: x.replace(' id ', ' '))
-        return wordSeries
-
     documents = cleanText(documents)
     docs = [word_tokenize(content) for content in documents] #tockenize row by row
     # stopwords_=set(stopwords.words('english'))
