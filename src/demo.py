@@ -31,6 +31,10 @@ def demo_detector(article, tv, model):
 if __name__ == '__main__':
     demo_model = load_model('../saved_model/demo_model')
     demo_tv = pickle.load(open("demo_tv.pickle", "rb"))
-    X_demo = input("Enter the news you want to test: ")
-    demo_detector(X_demo, demo_tv, demo_model)
+    while True:
+        X_demo = input("Enter the news you want to test (Enter 'exit' to quit.):")
+        if X_demo == 'exit':
+            break
+        else:
+            demo_detector(X_demo, demo_tv, demo_model)
 
