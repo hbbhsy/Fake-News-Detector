@@ -22,7 +22,7 @@ Click [here](data/sample.csv) for a small representative shard of example data.
 Stopwords used for text preprocess is downloaded from the useful repo [news-stopwords](https://github.com/vikasing/news-stopwords.git). Only [1000 stopwords for news](data/sw1k.csv) were used for this project.
 
 ## EDA
-The news are labeled into 8 types. For each type, the 10 most frequent words are:
+The news are labeled into 11 types. For each type, the 10 most frequent words are:
 
 **Type**|**Words**
 ----|-----
