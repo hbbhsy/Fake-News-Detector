@@ -74,7 +74,7 @@ ROC and Precision/Recall Curve plot is shown below is comparing among the three 
 ![ROC](img/ROC3.png)
 
 In order to get a optimized model, the data were splited into a training set and a hold-out set. 5-fold cross-validation were carried out on the training set and AUROC score were used for hyperparameter tuning. 
-<img src="img/h1.png" width="500"/><img src="img/h2.png" width="500"/><img src="img/h3.png" width="500"/>
+<img src="img/h1.png" width="400"/><img src="img/h2.png" width="400"/><img src="img/h3.png" width="400"/>
 
 The final model were evaluated on the holdout set and achieved the following scores. Binary accuracy and f1-score were used to model evaluation.
 **Metric**|**Gradient Boosting**
