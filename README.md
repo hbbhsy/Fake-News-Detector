@@ -89,6 +89,7 @@ For NLP models, more and more deep learning models. Below is a comparison of a n
 ----------|-------|--------
 Binary Accuracy|0.92|0.89
 F1-Score|0.89|0.87
+
 It seems like a netural network model perforces better than the gradient boosting model and that is usually true for many NLP problems. Therefore, more study and research should be done in the deep learning fields to improve the detector.
 
 ## More
