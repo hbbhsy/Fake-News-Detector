@@ -7,7 +7,7 @@ Today we are living in the Era of information explosion. Along with the developm
 News has become faster, less costly and easily accessible with social media. This change has come along with some disadvantages as well. In particular, beguiling content, such as fake news made by social media users, is becoming increasingly dangerous. The fake news problem, despite being introduced for the first time very recently, has become an important research topic due to the high content of social media. Writing fake comments and news on social media is easy for users. The main challenge is to determine the difference between real and fake news. 
 
 ## Scope
-One of the most significant limitations of this work is the data that is openly available. The focus of this work is on using novel deep learning based approaches for natural language processing. Some of them (like LSTMs based on word embeddings) usually require large quantities of data.
+One of the most significant limitations of this work is the data that is openly available. The focus of this work is on using classic machine learning based approaches for natural language processing.
 
 ![info-explosion](img/Information-Explosion.jpg)
 
@@ -53,35 +53,45 @@ Word cloud for news labeled as 'Rumor':
 ![rumor_words](EDA/rumor_words.png)
 
 ## The Detector
-The Fake News Detector is a deep learning model trained using the [Fake News Corpus](https://github.com/several27/FakeNewsCorpus) dataset. At this stage, the detector is able to perform fake and non-fake news detection. 
-#### Pipeline
-1. Fork and clone this repo to your local machine
-2. Run the [script](src/model.py) to load, clean, tokenize the dataset, and to train the final model. Or you can load the trained model from [here](s3://fakenewscorpus), an AWS S3 bucket created for this project.
-3. Test your own news articles using src/model.py and compare the prediction to your labeled news.
+The Fake News Detector is a classification model trained using the [Fake News Corpus](https://github.com/several27/FakeNewsCorpus) dataset. At this stage, the detector is able to perform fake and non-fake news detection. 
 
 #### Text Preprocess
-TF-IDF matrix was generated to train most of the models including MLP model. For LSTM model, the traditional TF-IDF matrix cannot be utilized since it doesn't obtain the original order of words in a sentence. Thus the build-in Tokenizer in Keras was used to tokenize text and transfor text to sequences.
+In order to feed the text data into a machine learning model. We need to transfer the texts into numberical representations. There are many ways of doing that. In this project, I used the classic TF-IDF technique. 
+
+The text data were first cleaned as the following steps:
+* Remove punctuation: e.g. ",.!?"
+* Remove html tags: e.g. "<\br>", "\n", "\t", etc.
+* Change all charactors to lower cases
+* Remove stop words
+* Lemmatization
+
+Then using sklearn's buildin tfidfvectorizer, the cleaned text tokens can be transformed into a TF-IDF matrix.  
 
 #### Modeling and Model Comparison
-Both classic machine learning methods, and the most advanced deep learning methods are utilized to build the fake news detector model.
+In this project, I tried out three different classifers including a Logistic Regression model, Multinormial Naive Bayes model, and a Gradient Boosting Model.
 
-Accuracy, AUROC, and f1-score were used for model comparison. 
-ROC and Precision/Recall Curve plot is shown below is comparing among classic machine learning models including a Logistic Regression model, Multinormial Naive Bayes model, and a Gradient Boosting Model.
+ROC and Precision/Recall Curve plot is shown below is comparing among the three models.By looking at ROC curve, the gradient boosting model appears to be a better model comparing to other method.
 ![ROC](img/ROC3.png)
 
-By looking at ROC curve, the gradient boosting model appears to be a better model comparing to other method. 
+In order to get a optimized model, the data were splited into a training set and a hold-out set. 5-fold cross-validation were carried out on the training set and AUROC score were used for hyperparameter tuning. 
+<img src="img/h1.png" width="200"/><img src="img/h2.png" width="200"/><img src="img/h3.png" width="200"/>
 
-As for deep learning models, the better model appeared to be the MLP model. The LSTM model is built without a embedding layer, therefore the performance is not as good as the MLP model.
+The final model were evaluated on the holdout set and achieved the following scores. Binary accuracy and f1-score were used to model evaluation.
+**Metric**|**Gradient Boosting**
+----------|--------
+Binary Accuracy|0.89
+F1-Score|0.87
 
-**Metric**|**MLP**|**LSTM**|**Gradient Boosting**
-----------|-------|--------|---------------------
-Binary Accuracy|0.92|0.69|0.89
-AUROC|0.94|0.69|0.91
-F1-Score|0.89|0.30|0.87
 
-## Future Direction
-There are two major steps to be taken in the future:
-* Improve the model by implement word embedding layer in LSTM model.
+## What's next?
+For NLP models, more and more deep learning models. Below is a comparison of a netural network model with the gradient boositing model. The netural network model has one hidden layer of 500 units and used relu as activation function.
+**Metric**|**NN**|**Gradient Boosting**
+----------|-------|--------
+Binary Accuracy|0.92|0.89
+F1-Score|0.89|0.87
+It seems like a netural network model perforces better than the gradient boosting model and that is usually true for many NLP problems. Therefore, more study and research should be done in the deep learning fields to improve the detector.
+
+## More
 * Based on the detector, a fake news generator can be bring up on to schedule. Click for more update on the [Fake News Generator](https://github.com/hbbhsy/Fake-News-Generator).
 
 
