@@ -7,7 +7,7 @@ Today we are living in the Era of information explosion. Along with the developm
 News has become faster, less costly and easily accessible with social media. This change has come along with some disadvantages as well. In particular, beguiling content, such as fake news made by social media users, is becoming increasingly dangerous. The fake news problem, despite being introduced for the first time very recently, has become an important research topic due to the high content of social media. Writing fake comments and news on social media is easy for users. The main challenge is to determine the difference between real and fake news. 
 
 ## Scope
-The focus of this work is on using classic machine learning based approaches for natural language processing. 
+The focus of this work is using classic machine learning algorithms to build natural language processing classifer. 
 
 ![info-explosion](img/Information-Explosion.jpg)
 
