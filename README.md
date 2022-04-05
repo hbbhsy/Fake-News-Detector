@@ -45,10 +45,10 @@ Also, the following word clouds shows a few example of the most frequent words f
 A tendency of mentioning 'nuclear', 'blockchain' are appeared in 'fake' news. 
 Word cloud for news labeled as 'Fake'
 ![fake_words](EDA/fake_words.png)
-A tendency of mentioning 'muslin', 'islamic' are appeared in 'fake' news. 
+A tendency of mentioning 'muslin', 'islamic' are appeared in 'hate' news. 
 Word cloud for news labeled as 'Hate':
 ![fake_words](EDA/hate_words.png)
-A tendency of mentioning 'wave', 'theory' are appeared in 'fake' news. 
+A tendency of mentioning 'wave', 'theory' are appeared in 'rumor' news. 
 Word cloud for news labeled as 'Rumor':
 ![rumor_words](EDA/rumor_words.png)
 
